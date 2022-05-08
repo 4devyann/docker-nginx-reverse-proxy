@@ -1,0 +1,36 @@
+services:
+  reverse-proxy:
+    image: nginx:latest
+    container_name: reverse_proxy
+    depends_on:
+      - weather-report
+    volumes:
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+  weather-report:
+    image: weather-report
+    container_name: weather-report
+    build:
+      context: ./weather-report
+    ports:
+      - 4200:80
+    restart: on-failure
+  
+  saving-report:
+    image: saving-report
+    container_name: saving-report
+    build:
+      context: ./saving-report
+    ports:
+      - 4202:80
+    restart: on-failure
+  
+  trade-report:
+    image: trade-report
+    container_name: trade-report
+    build:
+      context: ./trade-report
+    ports:
+      - 4204:80
+    restart: on-failure
